@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+
+<head>
+  <link rel="stylesheet" type="text/css" href="scoreboard.css">
+  <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">  
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>  
+  <script   src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js"></script>
+  <script src="ap.js"> </script>
+
+</head>
+
+<body ng-app="ap" ng-controller="con" data-ng-init="reset()">
+
+    <div class="thebackgound" ng-style="bColor">
+
+<div id="settings">
+  <i class="fa fa-cogs" aria-hidden="true" ng-click=""></i>
+  Settings: <input type="checkbox" ng-model="myVar">
+</div>
+
+<div id="setting_popup" ng-show="myVar">
+  <strong>Settings</strong>
+  <div>    
+<form name="myForm">
+    <label for="singleSelect"> Scoreboard type: </label>
+    <select name="singleSelect" ng-model="data.singleSelect">
+      <option value="option-1">FootBall</option>
+      <option value="option-2">BasketBall</option>
+    </select>
+    </form>
+  </div>
+  
+  <div>
+    Home Team Name: <input type="text" ng-model="homeTeam">
+    </div>
+    <div>
+    Home Team Color 1: <input class="jscolor" type="text" ng-model="hColor" ng-change="changeColor()">    
+  </div>  
+    <div>
+    Home Team Color 2: <input class="jscolor" type="text" ng-model="htColor" ng-change="changeColor()">   
+  </div>    
+  <div>
+    Visitor Team Name: <input type="text" ng-model="visitTeam">
+    </div>
+    <div>        
+    Visitor Team Color 1: <input class="jscolor" type="text" ng-model="vColor" ng-change="changeColor()">
+  </div>
+    <div>        
+    Visitor Team Color 2: <input class="jscolor" type="text" ng-model="vtColor" ng-change="changeColor()">
+  </div>  
+    <div>        
+    Score Board Background: <input class="jscolor" type="text" ng-model="bgColor" ng-change="changeColor()">
+  </div>  
+  
+</div>
+
+<div class="container-fluid">
+<div class="row row_center">
+<div>
+  ScoreBoard
+</div>
+  <div class="col-sm-4">
+    <div class="scoreheader home" ng-style="hStyle"> 
+      {{homeTeam}}
+    </div>
+    <div class="score">
+      {{homeScore}}
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="scoreheader period">
+      {{sections}}
+    </div>
+    <div class="score">
+      {{per}}
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="visitor scoreheader" ng-style="vStyle">
+      {{visitTeam}}
+    </div>
+    <div class="score">
+      {{visitScore}} 
+    </div>
+  </div>
+</div>
+<div class="row" style="padding-top: 5px;">
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-danger" ng-click="scoreHS(-1)">H-</button>    
+    <button type="button" class="btn btn-success" ng-click="scoreHS(1)">H+</button>
+    <button type="button" class="btn btn-danger" ng-click="zeroHS(0)">Zero</button>            
+    <div style="padding-top: 5px;">
+      <h4>
+      <img src="https://image.flaticon.com/icons/svg/140/140378.svg" width="20px"/> Basketball       
+      </h4>
+      <button type="button" class="btn btn-success" ng-click="scoreHS(1)">1</button>
+      <button type="button" class="btn btn-success" ng-click="scoreHS(2)">2</button>
+      <button type="button" class="btn btn-success" ng-click="scoreHS(3)">3</button>
+    </div>
+    <div style="padding-top: 5px;">
+      <h4>
+      <img src="https://image.flaticon.com/icons/svg/124/124144.svg" width="20px"/> Football
+      </h4>
+      <button type="button" class="btn btn-success" ng-click="scoreHS(1)">1</button>
+      <button type="button" class="btn btn-success" ng-click="scoreHS(2)">2</button>   
+      <button type="button" class="btn btn-success" ng-click="scoreHS(3)">3</button>    
+      <button type="button" class="btn btn-success" ng-click="scoreHS(6)">6</button>           </div>    
+  </div>
+   
+  <div class="col-sm-4">
+    <div> 
+      <button type="button" class="btn btn-primary" ng-click="period('Q')">Quarters</button>
+      <button type="button" class="btn btn-primary" ng-click="period('P')">Periods</button>     </div>   
+    <button type="button" class="btn btn-primary" ng-click="reset()">Reset</button>    
+  </div>
+
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-danger" ng-click="scoreVS(-1)">V-</button>    
+    <button type="button" class="btn btn-success" ng-click="scoreVS(1)">V+</button>
+    <button type="button" class="btn btn-danger" ng-click="zeroVS(0)">Zero</button>    
+    <div style="padding-top: 5px;">
+      <h4>
+        <img src="https://image.flaticon.com/icons/svg/140/140378.svg" width="20px"/> Basketball
+      </h4>
+    <button type="button" class="btn btn-success" ng-click="scoreVS(1)">1</button>       
+    <button type="button" class="btn btn-success" ng-click="scoreVS(2)">2</button>    
+    <button type="button" class="btn btn-success" ng-click="scoreVS(3)">3</button>
+    </div>
+    <div style="padding-top: 5px;">
+      <h4>
+        <img src="https://image.flaticon.com/icons/svg/124/124144.svg" width="20px"/> Football      
+      </h4>
+      <button type="button" class="btn btn-success" ng-click="scoreVS(1)">1</button>       
+      <button type="button" class="btn btn-success" ng-click="scoreVS(2)">2</button>       
+      <button type="button" class="btn btn-success" ng-click="scoreVS(3)">3</button>    
+      <button type="button" class="btn btn-success" ng-click="scoreVS(6)">6</button>       
+      </div>        
+    </div>  
+  </div>
+</div>
+</div>
+</body>
+</html>
